@@ -20,7 +20,7 @@ universal_binaries:
 brews:
   -
     name: diantre
-    homepage: "https://github.com/mericozkayagan/diantre"
+    homepage: "https://github.com/mericozkayagan/homebrew-mericozkayagan"
     tap:
       owner: mericozkayagan
       name: homebrew-mericozkayagan
