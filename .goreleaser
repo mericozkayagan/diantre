@@ -20,13 +20,10 @@ universal_binaries:
 brews:
   -
     name: diantre
-    homepage: "https://github.com/mericozkayagan/homebrew-mericozkayagan"
+    homepage: "https://github.com/mericozkayagan/diantre"
     tap:
       owner: mericozkayagan
       name: homebrew-mericozkayagan
     commit_author:
       name: mericozkayagan
       email: mericozkayagan@gmail.com
-
-checksum:
-  name_template: 'checksums.txt'
