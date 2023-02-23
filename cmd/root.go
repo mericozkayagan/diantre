@@ -1,17 +1,17 @@
-/*
-Copyright © 2023 NAME HERE <EMAIL ADDRESS>
-
-*/
 package cmd
 
 import (
+	"fmt"
 	"os"
-	"github.com/mericozkayagan/diantre/cmd/create"
+
+	"github.com/mericozkayagan/diantre/cmd/deploy"
+	"github.com/mericozkayagan/diantre/cmd/newrepo"
+
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
 
-
+var cfgFile string
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -37,21 +37,44 @@ func Execute() {
 	}
 }
 
-func addSubcommandPalettes(){
-	rootCmd.AddCommand(create.CreateCmd)
-}
-
 func init() {
+	cobra.OnInitialize(initConfig)
+
 	// Here you will define your flags and configuration settings.
 	// Cobra supports persistent flags, which, if defined here,
 	// will be global for your application.
 
-	// rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.diantre.yaml)")
+	// Add my subcommand palette
+	rootCmd.AddCommand(newrepo.NewrepoCmd)
+	rootCmd.AddCommand(deploy.DeployCmd)
+
+	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.diantre.yaml)")
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
 	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
-	addSubcommandPalettes()
 }
 
+// initConfig reads in config file and ENV variables if set.
+func initConfig() {
+	if cfgFile != "" {
+		// Use config file from the flag.
+		viper.SetConfigFile(cfgFile)
+	} else {
+		// Find home directory.
+		home, err := os.UserHomeDir()
+		cobra.CheckErr(err)
 
+		// Search config in home directory with name ".diantre" (without extension).
+		viper.AddConfigPath(home)
+		viper.SetConfigType("yaml")
+		viper.SetConfigName(".diantre")
+	}
+
+	viper.AutomaticEnv() // read in environment variables that match
+
+	// If a config file is found, read it in.
+	if err := viper.ReadInConfig(); err == nil {
+		fmt.Fprintln(os.Stderr, "Using config file:", viper.ConfigFileUsed())
+	}
+}

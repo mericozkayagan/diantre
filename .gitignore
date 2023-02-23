@@ -1,0 +1,41 @@
+.env
+#Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+#Test binary, built with go test -c
+*.test
+
+#Output of the go coverage tool, specifically when used with LiteIDE
+*.out
+
+#IntelliJ
+.idea/
+
+#Go dependencies
+/vendor/
+
+#Generated swagger files
+swagger.json
+swagger.yaml
+
+#IDE-related folders
+/node_modules/
+/public/bower_components/
+/target/
+/build/
+
+#Publish output
+/bin/
+/pkg/
+
+#Other generated files
+/ts.js
+.make.txt
+
+#Visual Studio Code
+.vscode/
+
