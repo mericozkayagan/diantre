@@ -22,6 +22,7 @@ This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("newrepo called")
+		newrepo.CreateNewRepo()
 	},
 }
 
@@ -35,5 +36,4 @@ func init() {
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
 	// newrepoCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
-	newrepo.CreateNewRepo();
 }

@@ -4,7 +4,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/mericozkayagan/diantre/cmd/deploy"
+	"github.com/mericozkayagan/diantre/cmd/commitpr"
+	"github.com/mericozkayagan/diantre/cmd/create"
 	"github.com/mericozkayagan/diantre/cmd/newrepo"
 
 	"github.com/spf13/cobra"
@@ -46,7 +47,8 @@ func init() {
 
 	// Add my subcommand palette
 	rootCmd.AddCommand(newrepo.NewrepoCmd)
-	rootCmd.AddCommand(deploy.DeployCmd)
+	rootCmd.AddCommand(create.CreateCmd)
+	rootCmd.AddCommand(commitpr.CommitPrCmd)
 
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.diantre.yaml)")
 

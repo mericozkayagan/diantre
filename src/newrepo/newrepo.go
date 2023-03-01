@@ -36,7 +36,7 @@ var (
 	templateRepositoryName string
 )
 
-func init() {
+func addParameters() {
 	fmt.Println("Please enter your repository name: ")
 	fmt.Scanln(&name)
 
@@ -62,6 +62,7 @@ func init() {
 
 func CreateNewRepo() {
 	flag.Parse()
+	addParameters()
 
 	client, ctx := authentication.Auth()
 
