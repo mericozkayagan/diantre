@@ -13,8 +13,9 @@ var (
 )
 
 func addParameters() {
-	fmt.Println(`Leave TerragruntPath null, if your directory is like terragrunt/app
-	***************************************
+	fmt.Println(`
+Leave TerragruntPath null, if your directory is like terragrunt/app
+***************************************
 	`)
 
 	placeholderValues = map[string]string{

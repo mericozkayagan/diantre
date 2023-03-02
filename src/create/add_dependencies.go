@@ -40,7 +40,7 @@ dependency "%s" {
 		panic(err)
 	}
 
-	fmt.Println("Successfully added the dependency configuration!!!")
+	fmt.Println("Successfully added the dependency configuration")
 }
 
 func AddToCustomRoleArns(name, environment, directory, terragruntPath string) {
@@ -83,5 +83,5 @@ func AddToCustomRoleArns(name, environment, directory, terragruntPath string) {
 		panic(err)
 	}
 
-	fmt.Println("Successfully added the dependency to the custom_role_policy_arns list!!!")
+	fmt.Println("Successfully added the dependency to the custom_role_policy_arns list")
 }

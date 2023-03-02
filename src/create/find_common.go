@@ -1,38 +1,51 @@
 package create
 
 import (
-	"fmt"
+	"errors"
 	"os"
 	"path/filepath"
 	"strings"
 )
 
-func FindCommonDirectory(startingDir, resourceType string) (commonDirectory string, err error) {
-	// Check if the starting directory contains a "common" directory
-	commonDir := filepath.Join(startingDir, "common")
-	if _, err := os.Stat(commonDir); err == nil {
-		// Construct the source path using the common directory
+func FindCommonDirectory(directory, resourceType string) (source string, err error) {
+	for directory != "" {
+		// Check if the module directory exists in the current directory
+		var module []string
 		switch strings.ToLower(resourceType) {
 		case "s3":
-			source := filepath.Join(commonDir, "terragrunt-base", "modules", "terraform-aws-s3-bucket")
-			return source, nil
+			module = []string{"terraform-aws-s3-bucket"}
+
 		case "secrets-manager":
-			source := filepath.Join(commonDir, "terragrunt-base", "modules", "terraform-aws-secrets-manager")
-			return source, nil
+			module = []string{"terraform-aws-secrets-manager"}
+
 		case "iam/policies":
-			source := filepath.Join(commonDir, "terragrunt-base", "modules", "terraform-aws-iam/modules/iam-policy")
-			return source, nil
+			module = []string{"terraform-aws-iam", "modules", "iam-policy"}
+
 		default:
-			return "", fmt.Errorf("unsupported resource type: %s", resourceType)
+			panic("Resource type is not supported")
 		}
+
+		moduleDir := filepath.Join(directory, "common", "terragrunt-base", "modules", filepath.Join(module...))
+		if fileInfo, err := os.Stat(moduleDir); err == nil && fileInfo.IsDir() {
+			if !strings.Contains(fileInfo.Name(), module[len(module)-1]) {
+				// This is not the correct directory, continue searching
+				continue
+			}
+
+			// Construct the source path using the module directory
+			relPath, _ := filepath.Rel(directory, moduleDir)
+			numUpDirs := strings.Count(relPath, string(filepath.Separator))
+			if len(module) > 1 && module[len(module)-2] == "modules" {
+				numUpDirs--
+			}
+			source = strings.Repeat("../", numUpDirs+1)
+			source = filepath.Join(source, "common", "terragrunt-base", "modules", filepath.Join(module...))
+			source = strings.Replace(source, "/terragrunt-base", "//terragrunt-base", 1)
+			return source, nil
+		}
+
+		directory = filepath.Dir(directory)
 	}
 
-	// If the starting directory does not contain a "common" directory, move up one level and try again
-	parentDir := filepath.Dir(startingDir)
-	if parentDir == startingDir {
-		// We've reached the root directory and didn't find a "common" directory, so return an error
-		return "", fmt.Errorf("could not find common directory")
-	}
-
-	return FindCommonDirectory(parentDir, resourceType)
+	return "", errors.New("module directory not found")
 }
